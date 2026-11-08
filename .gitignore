@@ -1,0 +1,33 @@
+# Model weights / checkpoints (jangan di-commit)
+*.keras
+*.h5
+*.weights.h5
+*.pt
+*.pth
+*.ckpt
+checkpoints/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Logs
+logs/
+*.log
+
+# OS / editor
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+
+# Dataset: SENGAJA di-commit (~31 MB, 1000 jpg) agar semua pasangan
+# memakai split yang identik. Hapus tanda # di bawah jika ingin di-ignore.
+# data/
