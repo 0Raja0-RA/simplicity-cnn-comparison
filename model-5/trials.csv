@@ -1,0 +1,1 @@
+trial,alpha,minimalistic,pooling,lr,optimizer,unfreeze_pct,batch_size,dropout,val_acc,val_loss,best_epoch,train_time_sec
