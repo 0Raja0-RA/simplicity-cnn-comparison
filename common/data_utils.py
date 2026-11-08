@@ -6,8 +6,10 @@ model wajib dilatih ulang (README bagian 3 dan 5).
 
 Ringkasan pipeline
 ------------------
-- Sumber: data/train, data/validation, data/test berupa berkas campur tanpa
-  subfolder per kelas (contoh: data/train/0.jpg).
+- Sumber: dataset Kaggle simplicity_224.npz kalau terpasang. Gambarnya sudah
+  di-letterbox dengan _letterbox() di bawah, jadi isinya identik dengan hasil
+  dari JPEG. Kalau npz tidak ada, data/train, data/validation, data/test berupa
+  berkas campur tanpa subfolder per kelas (contoh: data/train/0.jpg).
 - Label: integer 0-9 = nomor berkas // 100, urutan sesuai CLASS_NAMES.
   Karena label berupa integer, pakai loss "sparse_categorical_crossentropy".
 - Resize: padding (letterbox) ke IMG_SIZE. Sisi terpanjang diperkecil dengan
@@ -49,8 +51,8 @@ Contoh pemakaian di notebook model-N/
 
 Cara pakai di Kaggle
 --------------------
-Pakai sel setup di common/template_kaggle.ipynb (Internet ON, accelerator GPU).
-Intinya:
+Pakai sel setup di template_kaggle.ipynb yang dibagikan di grup (Internet ON,
+accelerator GPU). Intinya:
     !git clone https://github.com/0Raja0-RA/simplicity-cnn-comparison.git
     import sys
     sys.path.insert(0, "/kaggle/working/simplicity-cnn-comparison")
@@ -60,11 +62,13 @@ Intinya:
 Berkas ini DIKUNCI: jangan disalin, ditulis ulang, atau diubah di notebook.
 Pakai hanya lewat import. du.sidik_config() membuktikan versi yang dipakai.
 
-Kalau data diunggah sebagai Kaggle Dataset (bukan ikut git clone), arahkan
-DATA_DIR lewat environment variable SEBELUM import:
-    import os
-    os.environ["SIMPLICITY_DATA_DIR"] = "/kaggle/input/<nama-dataset>/data"
-Isinya tetap diperiksa terhadap common/manifest.csv.
+Dataset Kaggle: pasang dataset publik KAGGLE_DATASET lewat Add Input di panel
+kanan notebook. load_data() dan load_test() lalu membaca simplicity_224.npz dari
+/kaggle/input dan mencetak sumber datanya. Isi npz dicek dengan NPZ_SHA256
+sebelum dipakai. Di luar Kaggle, berkas npz bisa ditunjuk lewat environment
+variable SIMPLICITY_NPZ. Tanpa npz, gambar dibaca dari data/ hasil git clone
+(folder lain bisa ditunjuk lewat SIMPLICITY_DATA_DIR), dan isi data/ tetap
+diperiksa terhadap common/manifest.csv.
 
 Menjalankan langsung
 --------------------
@@ -105,6 +109,11 @@ DATA_DIR = Path(os.environ.get(
 )).resolve()
 MANIFEST_PATH = Path(__file__).resolve().parent / "manifest.csv"   # checksum SHA-256
 
+# Dataset Kaggle berisi gambar yang sudah di-letterbox; dipakai otomatis kalau terpasang
+KAGGLE_DATASET = "yonobengkel12/simplicity-224-letterbox"
+NPZ_NAMA = "simplicity_224.npz"
+NPZ_SHA256 = "0c140e73261690e18ef21347de34becd52e7c33dbd08b78518dac9eb5c567322"   # checksum isi npz
+
 SPLITS = ("train", "validation", "test")
 CLASS_NAMES = ("People", "Beach", "Building", "Bus", "Dinosaur",
                "Elephant", "Flower", "Horse", "Mountain", "Food")   # indeks = label
@@ -123,6 +132,7 @@ FILL_MODE = "reflect"           # pengisi area kosong setelah rotasi/zoom/geser
 
 # Cache hasil pemeriksaan hash dalam satu sesi Python: {DATA_DIR: True}
 _HASH_CACHE: dict[str, bool] = {}
+_NPZ_CACHE: dict[str, dict] = {}    # isi npz yang sudah dimuat dalam satu sesi Python: {path: arrays}
 _MAKS_DAFTAR = 10               # batas jumlah berkas yang disebut di pesan error
 
 
@@ -164,6 +174,42 @@ def _sha256(path: Path) -> str:
 def _hash_data() -> dict[str, str]:
     """{path_relatif: sha256} untuk semua gambar di ketiga split."""
     return {f"{split}/{p.name}": _sha256(p) for split in SPLITS for p in _daftar_gambar(split)}
+
+
+def _sha256_isi(arrays: dict) -> str:
+    """Checksum isi npz: nama kunci, dtype, shape, dan byte tiap array, urut nama kunci."""
+    h = hashlib.sha256()
+    for kunci in sorted(arrays):
+        a = np.ascontiguousarray(arrays[kunci])
+        h.update(kunci.encode())
+        h.update(str(a.dtype).encode())
+        h.update(str(a.shape).encode())
+        h.update(a.tobytes())
+    return h.hexdigest()
+
+
+def _cari_npz():
+    """Lokasi npz: env SIMPLICITY_NPZ, atau dataset yang terpasang di /kaggle/input. None kalau tidak ada."""
+    if os.environ.get("SIMPLICITY_NPZ"):
+        return Path(os.environ["SIMPLICITY_NPZ"])
+    kaggle = Path("/kaggle/input")
+    if kaggle.is_dir():
+        hasil = sorted(kaggle.rglob(NPZ_NAMA))
+        if hasil:
+            return hasil[0]
+    return None
+
+
+def _muat_npz(path: Path) -> dict:
+    """Muat npz sekali per sesi, lalu cocokkan checksum isinya dengan NPZ_SHA256."""
+    kunci = str(path)
+    if kunci not in _NPZ_CACHE:
+        with np.load(path, allow_pickle=False) as f:
+            isi = {k: f[k] for k in f.files}
+        if _sha256_isi(isi) != NPZ_SHA256:
+            raise ValueError(f"{path} bukan dataset npz yang disepakati kelompok (checksum berbeda).")
+        _NPZ_CACHE[kunci] = isi
+    return _NPZ_CACHE[kunci]
 
 
 # =============================================================================
@@ -329,13 +375,20 @@ def _letterbox(path):
 
 
 def _buat_dataset(split: str, batch_size: int, acak: bool, seed: int):
-    paths = _daftar_gambar(split)
-    labels = np.array([int(p.stem) // 100 for p in paths], dtype=np.int32)
-    ds = tf.data.Dataset.from_tensor_slices(([str(p) for p in paths], labels))
-    ds = ds.map(lambda p, y: (_letterbox(p), y), num_parallel_calls=tf.data.AUTOTUNE)
+    npz = _cari_npz()
+    if npz is not None:                           # dataset Kaggle: gambar sudah di-letterbox
+        isi = _muat_npz(npz)
+        ds = tf.data.Dataset.from_tensor_slices((isi[f"x_{split}"], isi[f"y_{split}"]))
+        n = len(isi[f"y_{split}"])
+    else:                                         # cadangan: baca JPEG dari data/
+        paths = _daftar_gambar(split)
+        labels = np.array([int(p.stem) // 100 for p in paths], dtype=np.int32)
+        ds = tf.data.Dataset.from_tensor_slices(([str(p) for p in paths], labels))
+        ds = ds.map(lambda p, y: (_letterbox(p), y), num_parallel_calls=tf.data.AUTOTUNE)
+        n = len(paths)
     ds = ds.cache()                               # decode + resize cukup sekali (uint8, hemat memori)
     if acak:
-        ds = ds.shuffle(len(paths), seed=seed, reshuffle_each_iteration=True)
+        ds = ds.shuffle(n, seed=seed, reshuffle_each_iteration=True)
     ds = ds.map(lambda x, y: (tf.cast(x, tf.float32), y), num_parallel_calls=tf.data.AUTOTUNE)
     return ds.batch(batch_size).prefetch(tf.data.AUTOTUNE)
 
@@ -343,7 +396,8 @@ def _buat_dataset(split: str, batch_size: int, acak: bool, seed: int):
 def load_data(batch_size: int = BATCH_SIZE, seed: int = SEED):
     """Kembalikan (train_ds, val_ds) berisi (gambar float32 0-255, label int32 0-9).
 
-    - Memanggil verifikasi_data() dan set_seed(seed) terlebih dahulu.
+    - Memanggil verifikasi_data() dan set_seed(seed) terlebih dahulu, lalu
+      mencetak sumber data (npz dataset Kaggle atau JPEG di data/).
     - train_ds di-shuffle dengan seed (urutan berbeda tiap epoch, tetapi deterministik).
     - val_ds TIDAK di-shuffle, jadi ambil_label(val_ds) cocok dengan urutan prediksi.
     - Augmentasi TIDAK diterapkan di sini; pakai get_augmentation() di dalam model.
@@ -352,6 +406,7 @@ def load_data(batch_size: int = BATCH_SIZE, seed: int = SEED):
     _perlu_tf()
     verifikasi_data()
     set_seed(seed)
+    print("Sumber data:", sumber_data())
     train_ds = _buat_dataset("train", batch_size, acak=True, seed=seed)
     val_ds = _buat_dataset("validation", batch_size, acak=False, seed=seed)
     return train_ds, val_ds
@@ -369,6 +424,7 @@ def load_test(batch_size: int = BATCH_SIZE):
     """
     _perlu_tf()
     verifikasi_data()
+    print("Sumber data:", sumber_data())
     return _buat_dataset("test", batch_size, acak=False, seed=SEED)
 
 
@@ -404,6 +460,14 @@ def ambil_label(ds) -> np.ndarray:
 def get_class_names() -> list[str]:
     """Salinan daftar nama kelas; indeks = label."""
     return list(CLASS_NAMES)
+
+
+def sumber_data() -> str:
+    """Sumber gambar untuk load_data() dan load_test(): berkas npz dataset Kaggle, atau folder data/ (JPEG)."""
+    npz = _cari_npz()
+    if npz is not None:
+        return f"{npz} (npz dataset Kaggle)"
+    return f"{DATA_DIR} (JPEG; dataset Kaggle {KAGGLE_DATASET} tidak terpasang)"
 
 
 def sidik_config(cetak: bool = True) -> str:
