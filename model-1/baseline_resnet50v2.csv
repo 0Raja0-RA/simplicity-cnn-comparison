@@ -1,2 +1,0 @@
-trial,learning_rate,dropout,dense_units,fine_tune,batch_size,val_acc,val_loss,best_epoch,epoch_dijalankan,train_time_sec,dijalankan_oleh,sidik_config
-baseline,0.001,0.0,0,0,32,0.95,0.1837,14,22,195.9,juna,b3e0629783c5
