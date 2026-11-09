@@ -1,0 +1,6 @@
+trial,learning_rate,unfreeze_pct,optimizer,weight_decay,dropout,head_units,batch_size,val_acc,val_loss,best_epoch,train_time_sec
+1,0.0001,0.0,rmsprop,0.0,0.2,0,16,0.973333,0.096634,40,94.83
+2,0.0001,0.35,rmsprop,0.0,0.2,0,16,0.976667,0.071782,9,54.09
+3,0.0003,0.35,adamw,0.001,0.2,256,32,0.976667,0.101039,1,38.17
+4,0.0003,0.2,rmsprop,0.0,0.2,256,32,0.976667,0.076056,4,37.77
+5,0.0005,0.2,adamw,0.0,0.3,0,16,0.970000,0.098075,4,41.66
