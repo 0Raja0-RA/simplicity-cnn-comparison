@@ -1,0 +1,11 @@
+{
+  "trial_terbaik": 10,
+  "akurasi_test": 0.98,
+  "macro_f1": 0.979473,
+  "total_parameter": 6249818,
+  "trainable_parameter": 330506,
+  "non_trainable_parameter": 5919312,
+  "ukuran_berkas_mb": 26.04,
+  "waktu_inferensi_ms": 1.957,
+  "waktu_latih_detik": 56.25
+}
