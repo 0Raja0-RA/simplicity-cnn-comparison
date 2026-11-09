@@ -1,0 +1,11 @@
+trial,buka_layer,learning_rate,optimizer,weight_decay,dropout,unit_head,batch_size,val_acc,val_loss,best_epoch,epoch_dijalankan,train_time_sec,dijalankan_oleh,sidik_config
+1,beku,0.000445,adamw,0.0001,0.41,256,16,0.9867,0.0544,15,23,211.7,ilham,b3e0629783c5
+2,beku,0.00276,adamw,0.001,0.44,256,16,0.9833,0.0576,2,10,101.6,ilham,b3e0629783c5
+3,stage_2+3,3.04e-05,adam,0.0,0.48,256,32,0.9833,0.0749,38,40,840.4,ilham,b3e0629783c5
+4,stage_3,3.77e-05,adamw,0.0001,0.37,0,32,0.9833,0.0765,40,40,528.9,ilham,b3e0629783c5
+5,beku,0.00167,adam,0.0,0.43,256,32,0.9867,0.053,25,33,294.1,ilham,b3e0629783c5
+6,stage_3,0.000183,adam,0.0,0.43,256,32,0.9867,0.058,15,23,316.0,arta,b3e0629783c5
+7,beku,0.000489,adam,0.0,0.25,0,32,0.98,0.0791,40,40,364.1,arta,b3e0629783c5
+8,stage_2+3,9.3e-05,adam,0.0,0.3,256,32,0.98,0.0653,15,23,504.6,arta,b3e0629783c5
+9,stage_3,4.1e-05,adamw,1e-05,0.24,256,16,0.9867,0.0627,39,40,534.2,arta,b3e0629783c5
+10,beku,0.000976,adam,0.0,0.33,0,32,0.9767,0.0665,40,40,365.6,arta,b3e0629783c5
