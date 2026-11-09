@@ -35,13 +35,13 @@ Seluruh 10 konfigurasi hyperparameter di-generate secara deterministik menggunak
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 | **1** | beku | $4.45 \times 10^{-4}$ | AdamW | $1 \times 10^{-4}$ | 0.41 | 256 | 16 | **Ilham** |
 | **2** | beku | $2.76 \times 10^{-3}$ | AdamW | $1 \times 10^{-3}$ | 0.44 | 256 | 16 | **Ilham** |
-| **3** | stage_2+3 | $3.00 \times 10^{-5}$ | Adam | 0.0 | 0.48 | 256 | 32 | **Ilham** |
-| **4** | stage_3 | $3.80 \times 10^{-5}$ | AdamW | $1 \times 10^{-4}$ | 0.37 | 0 (direct) | 32 | **Ilham** |
+| **3** | stage_2+3 | $3.04 \times 10^{-5}$ | Adam | 0.0 | 0.48 | 256 | 32 | **Ilham** |
+| **4** | stage_3 | $3.77 \times 10^{-5}$ | AdamW | $1 \times 10^{-4}$ | 0.37 | 0 (direct) | 32 | **Ilham** |
 | **5** | beku | $1.67 \times 10^{-3}$ | Adam | 0.0 | 0.43 | 256 | 32 | **Ilham** |
 | **6** | stage_3 | $1.83 \times 10^{-4}$ | Adam | 0.0 | 0.43 | 256 | 32 | **Arta** |
 | **7** | beku | $4.89 \times 10^{-4}$ | Adam | 0.0 | 0.25 | 0 (direct) | 32 | **Arta** |
-| **8** | stage_2+3 | $9.30 \times 10^{-5}$ | Adam | 0.0 | 0.30 | 256 | 32 | **Arta** |
-| **9** | stage_3 | $4.10 \times 10^{-5}$ | AdamW | $1 \times 10^{-4}$ | 0.24 | 256 | 16 | **Arta** |
+| **8** | stage_2+3 | $9.31 \times 10^{-5}$ | Adam | 0.0 | 0.30 | 256 | 32 | **Arta** |
+| **9** | stage_3 | $4.08 \times 10^{-5}$ | AdamW | $1 \times 10^{-5}$ | 0.24 | 256 | 16 | **Arta** |
 | **10** | beku | $9.76 \times 10^{-4}$ | Adam | 0.0 | 0.33 | 0 (direct) | 32 | **Arta** |
 
 > **Catatan Strategi Layer:**
@@ -102,4 +102,40 @@ model-4_convnext_tiny/
 ├── hasil_test.json              # Ringkasan metrik akhir evaluasi test set
 └── README.md                    # Dokumentasi ini
 ```
+
+---
+
+## 5. Hasil 10 Trial dan Konfigurasi Terbaik
+
+Gabungan `trials.csv` (Ilham trial 1-5, Arta trial 6-10). Semua trial dijalankan di GPU Kaggle Tesla T4, sidik `data_utils.py` `b3e0629783c5`, sidik konfigurasi `e93feaa4cb03`.
+
+| Trial | Buka Layer | Val Acc | Val Loss | Best Epoch | Epoch Total | Durasi (s) | Dijalankan |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| 1 | beku | 0.9867 | 0.0544 | 15 | 23 | 211.7 | Ilham |
+| 2 | beku | 0.9833 | 0.0576 | 2 | 10 | 101.6 | Ilham |
+| 3 | stage_2+3 | 0.9833 | 0.0749 | 38 | 40 | 840.4 | Ilham |
+| 4 | stage_3 | 0.9833 | 0.0765 | 40 | 40 | 528.9 | Ilham |
+| **5** | **beku** | **0.9867** | **0.0530** | **25** | **33** | **294.1** | **Ilham** |
+| 6 | stage_3 | 0.9867 | 0.0580 | 15 | 23 | 316.0 | Arta |
+| 7 | beku | 0.9800 | 0.0791 | 40 | 40 | 364.1 | Arta |
+| 8 | stage_2+3 | 0.9800 | 0.0653 | 15 | 23 | 504.6 | Arta |
+| 9 | stage_3 | 0.9867 | 0.0627 | 39 | 40 | 534.2 | Arta |
+| 10 | beku | 0.9767 | 0.0665 | 40 | 40 | 365.6 | Arta |
+
+**Konfigurasi terbaik: Trial 5**, dipilih dari validation sebelum test. Empat trial seri di val_acc 0.9867 (trial 1, 5, 6, dan 9). Sesuai aturan pemilihan, pemenangnya adalah yang val_loss-nya terendah, yaitu trial 5 (0.0530).
+
+| Parameter | Nilai |
+| :--- | :--- |
+| `buka_layer` | `beku` (seluruh backbone ImageNet dibekukan, hanya head yang dilatih) |
+| `learning_rate` | $1.67 \times 10^{-3}$ |
+| `optimizer` | Adam |
+| `weight_decay` | 0.0 |
+| `dropout` | 0.43 |
+| `unit_head` | 256 (Dense GELU lalu Dropout) |
+| `batch_size` | 32 |
+| Epoch terbaik | 25 dari 33 epoch (berhenti oleh early stopping) |
+
+Kesepuluh trial berada di rentang val_acc 0.9767-0.9867. Selisih terbesarnya 0.01, setara 3 dari 300 gambar validation. Menurut aturan kelompok, selisih di bawah 2% dianggap setara, jadi trial 5 terpilih karena aturan pemilihan, bukan karena jauh lebih unggul.
+
+Evaluasi test dijalankan satu kali oleh Ilham sebagai pemilik trial 5, setelah bagian ini di-commit. Hasilnya disimpan di `hasil_test.json` dan `confusion_convnext_tiny.png`.
 
