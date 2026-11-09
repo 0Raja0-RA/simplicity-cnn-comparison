@@ -1,0 +1,12 @@
+{
+  "arsitektur": "DenseNet121",
+  "trial_terbaik": 5,
+  "test_acc": 0.985,
+  "macro_f1": 0.985,
+  "jumlah_parameter": 7302474,
+  "parameter_dilatih": 264970,
+  "ukuran_model_mb": 31.4,
+  "inferensi_ms_per_gambar": 23.56,
+  "train_time_sec": 72.4,
+  "sidik_config": "b3e0629783c5"
+}
