@@ -98,9 +98,23 @@ Evaluasi test akan dijalankan satu kali oleh Raja sebagai pemilik trial 5, setel
 
 ---
 
-## 4. Hasil Evaluasi Test
+## 4. Hasil Evaluasi Test (sekali, model trial 5)
 
-> **Belum dijalankan.** Bagian ini akan diperbarui setelah evaluasi test satu kali di Kaggle dengan model `model-2_trial05.keras`.
+Dijalankan di GPU Kaggle (Tesla T4) dengan model `model-2_trial05.keras` dari output run tuning, tanpa melatih ulang.
+
+| Metrik | Nilai |
+| :--- | :--- |
+| Akurasi test | **0.9850** (197 dari 200 citra uji benar; hanya 3 salah) |
+| Macro F1 | **0.9850** |
+| Jumlah parameter total | 7.302.474 |
+| Parameter dilatih | 264.970 (hanya head klasifikasi) |
+| Ukuran berkas model | 31.4 MB |
+| Waktu inferensi | 23.56 ms per gambar |
+| Waktu training trial 5 | 72.4 detik |
+
+Evaluasi test menunjukkan performa generalisasi yang sangat istimewa pada 200 data uji SIMPLIcity yang belum pernah dilihat sebelumnya. Dari 200 gambar uji (20 per kelas), model **hanya melakukan 3 kesalahan** (akurasi 98.50% / error 1.5%), mengungguli varian lain seperti MobileNetV3Large (98.00%) dan ConvNeXtTiny (98.00%).
+
+Grafik matriks kebingungan tersimpan di berkas [`confusion_densenet121.png`](confusion_densenet121.png) dan ringkasan metrik tersimpan di [`hasil_test.json`](hasil_test.json).
 
 ---
 
@@ -115,8 +129,8 @@ model-2_densenet121/
 ├── history_faruq.json         # Riwayat per epoch Trial 6-10
 ├── trials.csv                 # Tabel gabungan 10 trial (dihasilkan oleh sel gabung)
 ├── history_densenet121.png    # Grafik Loss & Akurasi Gradient Descent model terbaik
-├── confusion_densenet121.png  # Confusion Matrix pada test set (belum)
-├── hasil_test.json            # Ringkasan metrik akhir evaluasi test set (belum)
+├── confusion_densenet121.png  # Confusion Matrix pada test set
+├── hasil_test.json            # Ringkasan metrik akhir evaluasi test set
 └── README.md                  # Dokumentasi ini
 ```
 
