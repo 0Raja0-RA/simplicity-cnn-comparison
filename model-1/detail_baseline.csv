@@ -1,2 +1,0 @@
-trial,epoch_tahap1,epoch_tahap2,train_acc,train_loss,val_precision
-baseline,22,0,1.0,0.0116,0.9524
