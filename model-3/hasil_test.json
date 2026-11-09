@@ -6,6 +6,6 @@
   "trainable_parameter": 330506,
   "non_trainable_parameter": 5919312,
   "ukuran_berkas_mb": 26.04,
-  "waktu_inferensi_ms": 1.957,
+  "waktu_inferensi_ms": 1.947,
   "waktu_latih_detik": 56.25
 }
