@@ -1,13 +1,12 @@
 {
   "arsitektur": "MobileNetV3Large",
-  "trial_terbaik": 4,
-  "test_acc": 0.49,
-  "macro_f1": 0.4868,
-  "jumlah_parameter": 1447218,
-  "parameter_dilatih": 10250,
-  "ukuran_model_mb": 5.8,
-  "inferensi_ms_per_gambar": 1.21,
-  "train_time_sec": 48.49,
+  "trial_terbaik": 1,
+  "test_acc": 0.98,
+  "macro_f1": 0.9802,
+  "jumlah_parameter": 3005962,
+  "parameter_dilatih": 12810,
+  "ukuran_model_mb": 11.5,
+  "inferensi_ms_per_gambar": 1.47,
+  "train_time_sec": 57.69,
   "sidik_config": "b3e0629783c5"
 }
-
