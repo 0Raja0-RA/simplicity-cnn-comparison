@@ -1,6 +1,0 @@
-trial,learning_rate,optimizer,weight_decay,dropout,dense_units,fine_tune,batch_size,val_acc,val_loss,best_epoch,epoch_dijalankan,train_time_sec,dijalankan_oleh,sidik_config
-1,0.001,adam,0.0,0.3,128,60,16,0.9433,0.1544,3,21,330.6,juna,b3e0629783c5
-2,0.001,adam,0.0,0.2,128,0,16,0.9567,0.1422,4,12,181.9,juna,b3e0629783c5
-3,0.0005,adam,0.0,0.2,256,60,16,0.9467,0.1589,4,24,374.0,juna,b3e0629783c5
-4,0.0005,adam,0.0,0.2,128,30,16,0.9433,0.148,4,26,395.9,juna,b3e0629783c5
-5,0.0005,adam,0.0,0.2,0,30,32,0.94,0.1584,20,40,368.1,juna,b3e0629783c5
