@@ -1,0 +1,188 @@
+{
+  "sidik_data_utils": "b3e0629783c5",
+  "jumlah_gambar": {
+    "train": 500,
+    "validation": 300,
+    "test": 200
+  },
+  "ukuran_asli": {
+    "256x384": 200,
+    "384x256": 800
+  },
+  "porsi_portrait_persen": 20.0,
+  "porsi_padding_persen": 33.5,
+  "gambar_ditandai": [
+    {
+      "split": "train",
+      "nomor": 234,
+      "kelas": "Building",
+      "tanda": "gelap"
+    },
+    {
+      "split": "train",
+      "nomor": 245,
+      "kelas": "Building",
+      "tanda": "gelap"
+    },
+    {
+      "split": "train",
+      "nomor": 439,
+      "kelas": "Dinosaur",
+      "tanda": "terang"
+    },
+    {
+      "split": "train",
+      "nomor": 616,
+      "kelas": "Flower",
+      "tanda": "gelap, kontras rendah"
+    },
+    {
+      "split": "train",
+      "nomor": 618,
+      "kelas": "Flower",
+      "tanda": "gelap"
+    },
+    {
+      "split": "train",
+      "nomor": 637,
+      "kelas": "Flower",
+      "tanda": "gelap"
+    },
+    {
+      "split": "validation",
+      "nomor": 161,
+      "kelas": "Beach",
+      "tanda": "kontras rendah"
+    },
+    {
+      "split": "validation",
+      "nomor": 657,
+      "kelas": "Flower",
+      "tanda": "gelap, kontras rendah"
+    },
+    {
+      "split": "validation",
+      "nomor": 659,
+      "kelas": "Flower",
+      "tanda": "gelap"
+    },
+    {
+      "split": "validation",
+      "nomor": 660,
+      "kelas": "Flower",
+      "tanda": "gelap"
+    },
+    {
+      "split": "validation",
+      "nomor": 662,
+      "kelas": "Flower",
+      "tanda": "gelap"
+    },
+    {
+      "split": "validation",
+      "nomor": 663,
+      "kelas": "Flower",
+      "tanda": "gelap"
+    },
+    {
+      "split": "validation",
+      "nomor": 664,
+      "kelas": "Flower",
+      "tanda": "gelap"
+    },
+    {
+      "split": "validation",
+      "nomor": 678,
+      "kelas": "Flower",
+      "tanda": "gelap"
+    },
+    {
+      "split": "test",
+      "nomor": 684,
+      "kelas": "Flower",
+      "tanda": "gelap"
+    },
+    {
+      "split": "test",
+      "nomor": 688,
+      "kelas": "Flower",
+      "tanda": "gelap"
+    }
+  ],
+  "pasangan_foto_mirip": [
+    {
+      "a": "validation/768",
+      "b": "test/789",
+      "kelas": "Horse",
+      "mse": 0.0023
+    },
+    {
+      "a": "validation/763",
+      "b": "test/791",
+      "kelas": "Horse",
+      "mse": 0.0056
+    },
+    {
+      "a": "train/718",
+      "b": "test/795",
+      "kelas": "Horse",
+      "mse": 0.006
+    },
+    {
+      "a": "validation/770",
+      "b": "test/791",
+      "kelas": "Horse",
+      "mse": 0.0068
+    },
+    {
+      "a": "validation/769",
+      "b": "test/786",
+      "kelas": "Horse",
+      "mse": 0.0075
+    },
+    {
+      "a": "train/503",
+      "b": "validation/567",
+      "kelas": "Elephant",
+      "mse": 0.0078
+    },
+    {
+      "a": "train/749",
+      "b": "validation/766",
+      "kelas": "Horse",
+      "mse": 0.0079
+    },
+    {
+      "a": "validation/760",
+      "b": "test/789",
+      "kelas": "Horse",
+      "mse": 0.0081
+    },
+    {
+      "a": "validation/774",
+      "b": "test/796",
+      "kelas": "Horse",
+      "mse": 0.0083
+    },
+    {
+      "a": "train/616",
+      "b": "validation/657",
+      "kelas": "Flower",
+      "mse": 0.0086
+    },
+    {
+      "a": "train/724",
+      "b": "test/787",
+      "kelas": "Horse",
+      "mse": 0.0098
+    }
+  ],
+  "test_punya_kembaran": [
+    786,
+    787,
+    789,
+    791,
+    795,
+    796
+  ]
+}
