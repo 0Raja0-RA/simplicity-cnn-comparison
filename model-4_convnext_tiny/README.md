@@ -139,3 +139,30 @@ Kesepuluh trial berada di rentang val_acc 0.9767-0.9867. Selisih terbesarnya 0.0
 
 Evaluasi test dijalankan satu kali oleh Ilham sebagai pemilik trial 5, setelah bagian ini di-commit. Hasilnya disimpan di `hasil_test.json` dan `confusion_convnext_tiny.png`.
 
+---
+
+## 6. Hasil Evaluasi Test (sekali, model trial 5)
+
+Dijalankan di Kaggle (GPU Tesla T4) dengan model `model-4_trial05.keras` dari output run tuning, tanpa melatih ulang.
+
+| Metrik | Nilai |
+| :--- | :--- |
+| Akurasi test | **0.98** (196 dari 200 gambar) |
+| Macro F1 | 0.98 |
+| Macro precision | 0.9807 |
+| Macro recall | 0.98 |
+| Jumlah parameter | 28,019,562 (yang dilatih 199,434, hanya head) |
+| Ukuran model | 108.9 MB |
+| Waktu inferensi | 30.18 ms per gambar |
+| Waktu training trial 5 | 294.1 detik |
+
+Waktu inferensi diukur dengan cara di template kelompok, yaitu `model.predict` atas seluruh data test setelah pemanasan satu batch. Angka ini ikut menghitung overhead pipeline data, jadi hanya sebanding dengan model lain yang diukur dengan cara yang sama.
+
+Kesalahan hanya 4 gambar (lihat `confusion_convnext_tiny.png`):
+- 1 Beach diprediksi Mountain;
+- 1 Mountain diprediksi Beach;
+- 1 Building diprediksi People;
+- 1 Building diprediksi Beach.
+
+Tujuh kelas lain (People, Bus, Dinosaur, Elephant, Flower, Horse, dan Food) benar semua, 20 dari 20.
+

@@ -1,0 +1,14 @@
+{
+  "arsitektur": "ConvNeXtTiny",
+  "trial_terbaik": 5,
+  "test_acc": 0.98,
+  "macro_f1": 0.98,
+  "macro_precision": 0.9807,
+  "macro_recall": 0.98,
+  "jumlah_parameter": 28019562,
+  "parameter_dilatih": 199434,
+  "ukuran_model_mb": 108.9,
+  "inferensi_ms_per_gambar": 30.18,
+  "train_time_sec": 294.1,
+  "sidik_config": "b3e0629783c5"
+}
