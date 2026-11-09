@@ -66,7 +66,7 @@ Seluruh 10 konfigurasi hyperparameter di-generate secara deterministik menggunak
    ```
 4. Pilih **Save Version > Save & Run All** (atau jalankan sel secara berurutan).
 5. Setelah selesai, unduh berkas `trials_arta.csv` dan `history_arta.json` dari tab **Output Kaggle**.
-6. Simpan berkas hasil unduhan ke folder `model-4/` di laptop.
+6. Simpan berkas hasil unduhan ke folder `model-4_convnext_tiny/` di laptop.
 
 ### B. Untuk Ilham (Trial 1 s/d 5)
 1. Buka notebook yang sama di akun Kaggle Ilham.
@@ -78,7 +78,7 @@ Seluruh 10 konfigurasi hyperparameter di-generate secara deterministik menggunak
 3. Jalankan hingga selesai dan unduh `trials_ilham.csv` serta `history_ilham.json`.
 
 ### C. Penggabungan & Evaluasi Test Set Akhir
-1. Letakkan `trials_ilham.csv` dan `trials_arta.csv` di folder `model-4/`.
+1. Letakkan `trials_ilham.csv` dan `trials_arta.csv` di folder `model-4_convnext_tiny/`.
 2. Jalankan Sel 12 (*Gabung Hasil Pasangan*):
    * Otomatis membuat `trials.csv` gabungan lengkap 10 trial.
    * Otomatis menyimpan grafik kurva konvergensi gradient descent `history_convnext_tiny.png`.
@@ -87,10 +87,10 @@ Seluruh 10 konfigurasi hyperparameter di-generate secara deterministik menggunak
 
 ---
 
-## 4. Struktur Berkas di `model-4/`
+## 4. Struktur Berkas di `model-4_convnext_tiny/`
 
 ```text
-model-4/
+model-4_convnext_tiny/
 ├── model-4_convnext_tiny.ipynb  # Notebook utama untuk Kaggle
 ├── trials_ilham.csv             # Log hasil Trial 1-5 (Ilham)
 ├── trials_arta.csv              # Log hasil Trial 6-10 (Arta)
