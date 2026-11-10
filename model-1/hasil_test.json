@@ -1,0 +1,14 @@
+{
+  "arsitektur": "ResNet50V2",
+  "trial_terbaik": 9,
+  "test_acc": 0.975,
+  "macro_f1": 0.9751,
+  "macro_precision": 0.9774,
+  "macro_recall": 0.975,
+  "jumlah_parameter": 23585290,
+  "parameter_dilatih": 17201162,
+  "ukuran_model_mb": 221.9,
+  "inferensi_ms_per_gambar": 11.28,
+  "train_time_sec": 513.7,
+  "sidik_config": "b3e0629783c5"
+}
